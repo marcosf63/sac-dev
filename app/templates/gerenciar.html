@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}SAC{% endblock %}
+
+{% block page_content %}
+  <div class="page-header">
+      <h1>{{ titulo }}</h1>
+  </div>
+  <div class="col-md-4">
+      {{ wtf.quick_form(form) }}
+  </div>
+
+  <div class="col-md-12">
+    <br>
+    <table class="table table-bordered">
+      <thead>
+      <tr>
+        {% for chave in dados[0] %}
+         <th>{{ chave }}</th>
+        {% endfor %}
+        <th></th>
+        <th><a href="#">Imprimir</a></th>
+
+      </tr>
+    </thead>
+    <tbody>
+
+          {% for dado in dados %}
+          <tr>
+            {% for chave in dado %}
+              <td>{{ dado[chave] }}</td>
+            {% endfor %}
+              {% if tabela == 'usuario' %}
+              <td><a href="{{ url_for('main.editar_usuario') }}">Editar</a></td>
+              <td><a href="{{ url_for('main.excluir_usuario') }}" id="excluir">Exluir</a></td>
+              {% elif tabela == 'disciplina' %}
+              <td><a href="{{ url_for('main.editar_disciplina') }}">Editar</a></td>
+              <td><a href="{{ url_for('main.excluir_disciplina') }}" id="excluir">Exluir</a></td>
+              {% elif tabela == 'fluxo' %}
+              <td><a href="{{ url_for('main.editar_fluxo') }}">Editar</a></td>
+              <td><a href="{{ url_for('main.excluir_fluxo') }}" id="excluir">Exluir</a></td>
+              {% elif tabela == 'coordenacao' %}
+              <td><a href="{{ url_for('main.editar_coordenacao') }}">Editar</a></td>
+              <td><a href="{{ url_for('main.excluir_coordenacao') }}" id="excluir">Exluir</a></td>
+              {% elif tabela == 'sala' %}
+              <td><a href="{{ url_for('main.editar_sala') }}">Editar</a></td>
+              <td><a href="{{ url_for('main.excluir_sala') }}" id="excluir">Exluir</a></td>
+              {% endif %}
+          </tr>
+          {% endfor %}
+
+
+    </tbody>
+
+    </table>
+  </div>
+
+{% endblock %}

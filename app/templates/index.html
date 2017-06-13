@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}SAC{% endblock %}
+
+{% block page_content %}
+<div class="page-header">
+
+    <div class="jumbotron">
+      <h2>Bem-vindo ao SAC - Sistema de Apóio à Coordenção</h2>
+      <ul>
+        <li><a href="#">Acessar lotação 2017.2</a></li>
+        <li><a href="#">Acessar lotação 2018.1</a></li>
+        <li><a href="{{ url_for('main.aprovar_solcitacao') }}">Solcitação Pendentes</a></li>
+      </ul>
+    </div>
+</div>
+{% endblock %}

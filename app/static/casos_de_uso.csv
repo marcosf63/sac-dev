@@ -1,0 +1,16 @@
+casos
+UC 001 - Autenticar Usuário (Login)
+UC 002 - Fazer a Lotação de Professoras nas disciplinas
+UC 003 - Emitir Relatorio lotação
+UC 004 - Emitir Relatorio para PROGRAD
+UC 005 - Emitir Relatorio Professores Cedidos
+UC 006 - Consultar Lotações do Professor
+UC 007 - Gerenciar Usuários
+UC 008 - Gerenciar Disciplinas
+UC 009 - Gerenciar Fluxos
+UC 010 - Gerenciar Coordenação
+UC 011 - Gerenciar Salas
+UC 012 - Emitir Relatório de Auditoria
+UC 013 - Solicitar Professor
+UC 014 - Aprovar Solicitação
+UC 015 - Copiar Lotação de Semestre Anterior

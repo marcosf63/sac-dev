@@ -1,0 +1,706 @@
+# -*- coding: utf-8 -*-
+from flask import render_template, redirect, url_for, flash, request
+from flask_login import login_required
+from . import main
+from .forms import (
+      SemestreForm,
+      ProfHoraSalaForm,
+      AuditoriaForm,
+      LotacaoProfForm,
+      CadastroUsuariosForm,
+      #SelecionaEditarExcluirUsuarioForm,
+      #EditarExcluirUsuarioForm,
+      CadastroDisciplinaForm,
+      EditarDisciplinaForm,
+      CadastroFluxoForm,
+      EditarFluxoForm,
+      CadastroCoordenacaoForm,
+      EditarCoordenacaoForm,
+      CadastroSalaForm,
+      EditarSalaForm,
+      SolicitarProfessorForm,
+      LotacaoProfForm,
+      #SelecionarEditarExcluiDisicplinaForm,
+      #EditarExcluirDisciplinaForm,
+      #EditarExcluirDisciplinaForm,
+      RelatorioLotacaoPorForm,
+      ReLotacaoPorProfessorForm,
+      EditarUsuariosForm,
+      dias,
+      periodos,
+      turnos,
+      LotacaoForm1,
+      LotacaoForm2,
+      LotacaoForm3
+
+)
+import csv
+import os
+
+# # prototipo do sistemas
+# @main.route('/prototipo')
+# def prototipo():
+#     diretorio_atual = os.getcwd()
+#     casos = []
+#     print (diretorio_atual + '/app/static/casos_de_uso.csv')
+#     arquivocsv = open(diretorio_atual + '/app/static/casos_de_uso.csv')
+#     casos_de_uso = csv.DictReader(arquivocsv)
+#     for caso in casos_de_uso:
+#         casos.append(caso['casos'].decode('utf-8'))
+#     arquivocsv.close()
+#     return render_template('prototipo.html', casos=casos)
+
+#Caso de Uso 1
+@main.route('/')
+def index():
+    return redirect(url_for('auth.login'))
+
+@main.route('/home')
+def home():
+    return render_template('index.html')
+
+#Caso de Uso 2
+@main.route('/lotacao', methods=['GET', 'POST'])
+def lotacao():
+    form = SemestreForm()
+    semestres = [
+      {
+        'semestre': '2017.2',
+        'situacao': 'Em andamento',
+      },
+      {
+        'semestre': '2017.1',
+        'situacao': 'Em andamento',
+      },
+      {
+        'semestre': '2016.1',
+        'situacao': 'Finalizada',
+      }
+     ]
+    if form.validate_on_submit():
+        semestres.insert(0, {'semestre': form.semestre.data, 'situacao' : 'Em andamento' })
+        form.semestre.data = ""
+        return render_template('lotacao.html', form=form, semestres=semestres)
+    return render_template('lotacao.html', form=form, semestres=semestres)
+
+
+
+#Caso de Uso 2
+@main.route('/editar_lotacao', methods=['GET', 'POST'])
+def editar_lotacao():
+    titulo = "Editar Lotação - tela 1 de 3"
+    form = LotacaoForm1()
+    if request.method == 'POST':
+        dados = {
+            "periodo" : form.periodo.data,
+            "disciplina" : form.disciplina.data,
+            "turma" : form.turma.data
+        }
+        return redirect(url_for('main.editar_lotacao2', dados=dados))
+    return render_template('editarLotacao.html', titulo=titulo.decode('utf-8'), form=form)
+
+#Caso de Uso 2
+@main.route('/editar_lotacao2', methods=['GET', 'POST'])
+def editar_lotacao2():
+    titulo = "Editar Lotação - tela 2 de 3"
+    form = LotacaoForm2()
+    if request.method == 'POST':
+        dados = {
+            "coordenacao" : form.coordenacao.data,
+            "professor" : form.professor.data,
+            "sala" : form.sala.data
+        }
+        return redirect(url_for('main.editar_lotacao3', dados=dados))
+    return render_template('editarLotacao2.html', titulo=titulo.decode('utf-8'), form=form)
+
+#Caso de Uso 2
+@main.route('/editar_lotacao3', methods=['GET', 'POST'])
+def editar_lotacao3():
+    titulo = "Editar Lotação - tela 3 de 3"
+    form = LotacaoForm3()
+    if request.method == 'POST':
+        dados = {
+            "dia" : form.dia.data,
+            "horario" : form.horario.data,
+        }
+        return redirect('main.editar_lotacao', dados=dados)
+    return render_template('editarLotacao3.html', titulo=titulo.decode('utf-8'), form=form)
+
+
+
+# #Caso de Uso 2 (tela 2 de 2)
+# @main.route('/editar_lotacao2', methods=['GET', 'POST'])
+# def editar_lotacao2():
+#     titulo = "Editar Lotação"
+#     return render_template('editarLotacao2.html', titulo=titulo.decode('utf-8'))
+
+
+
+@main.route('/alocar02')
+def alocar02():
+    form = ProfHoraSalaForm()
+    if form.validate_on_submit():
+        pass
+        # user = User.query.filter_by(email=form.email.data).first()
+        # if user is not None and user.verify_password(form.password.data):
+        #     login_user(user, form.remember_me.data)
+        #     return redirect(request.args.get('next') or url_for('main.index'))
+        # flash('Invalid username or password.')
+    return render_template('alocar02v2.html', form=form)
+
+@main.route('/alocar03')
+def alocar03():
+    form = AlocacaoForm()
+    if form.validate_on_submit():
+        pass
+        # user = User.query.filter_by(email=form.email.data).first()
+        # if user is not None and user.verify_password(form.password.data):
+        #     login_user(user, form.remember_me.data)
+        #     return redirect(request.args.get('next') or url_for('main.index'))
+        # flash('Invalid username or password.')
+    return render_template('alocar03.html', form=form)
+
+#Caso de Uso 3
+@main.route('/rel_lotacao_por', methods=['GET', 'POST'])
+def rel_lotacao_por():
+    form = RelatorioLotacaoPorForm()
+    msg = ""
+    msg2= ""
+    exibir_form = True
+    if request.method == 'POST':
+        tipo = ['por Periodo', 'por Dia', 'por Turno']
+        if int(form.tipo.data) is 1:
+            msg2 = periodos[int(form.periodo.data) - 1][int(form.periodo.data)]
+        elif int(form.tipo.data) is 2:
+            msg2 = dias[int(form.diaSemana.data) - 1][int(form.diaSemana.data)]
+        else:
+            msg2 = turnos[int(form.turno.data) - 1][int(form.turno.data)]
+        msg = tipo[int(form.tipo.data)-1]
+        exibir_form = False
+        return render_template('re_lotacao_por.html', form=form, msg=msg, msg2=msg2, exibir_form=exibir_form)
+    return render_template('re_lotacao_por.html', form=form, msg=msg, msg2=msg2, exibir_form=exibir_form)
+
+# Caso de Uso 4
+@main.route('/rel_PROGRAD')
+def rel_PROGRAD():
+    return render_template('re_PROGRAD.html')
+
+
+# Caso de Uso 5
+@main.route('/rel_cedidos')
+def rel_cedidos():
+    return render_template('re_cedidos.html')
+
+# Caso de Uso 6
+@main.route('/rel_lotacao_por_professor', methods=['GET', 'POST'])
+def rel_lotacao_por_professor():
+    form = ReLotacaoPorProfessorForm()
+    exibir_form = True
+    if request.method == 'POST':
+        exibir_form = False
+        return render_template('re_lotacao_professor.html', form=form, exibir_form=exibir_form)
+    return render_template('re_lotacao_professor.html', form=form, exibir_form=exibir_form)
+
+@main.route('/rel_lotacao_por_professor2')
+def rel_lotacao_por_professor_2():
+    return render_template('re_lotacao_professor2.html')
+
+# Caso de Uso 7
+@main.route('/gerenciar_usuario', methods=['GET', 'POST'])
+def gerenciar_usuario():
+    tabela = 'usuario'
+    form = CadastroUsuariosForm()
+    titulo = "Cadastro de Usuários"
+    dados = [
+      { 'Email':'nome@servidor.com',
+       'Nome' : 'Fulano de Tal',
+       'Telefone' : '(88)99999-9999',
+       'Lattes' : 'http://www.lathes.com/fulano',
+      'Tipo' : 'Professor'},
+       { 'Email':'nome@servidor.com',
+        'Nome' : 'Fulano de Tal',
+        'Telefone' : '(88)99999-9999',
+        'Lattes' : 'http://www.lathes.com/fulano',
+       'Tipo' : 'Professor'},
+        { 'Email':'nome@servidor.com',
+         'Nome' : 'Fulano de Tal',
+         'Telefone' : '(88)99999-9999',
+         'Lattes' : 'http://www.lathes.com/fulano',
+        'Tipo' : 'Professor'},
+    ]
+    if request.method == 'POST':
+        cargo = ['Coordenador', 'Professor', 'Servidor', 'Estagiário']
+        dados.append(
+          [form.email.data,
+          form.nome.data,
+          form.telefone.data,
+          form.lattes.data,
+          cargo[int(form.cargo.data)-1]]
+        )
+        return render_template('gerenciar.html', form=form, titulo=titulo.decode('utf-8'), dados=dados, tabela=tabela)
+    form.email.data = " "
+    form.nome.data = " "
+    form.telefone.data = " "
+    form.lattes.data = " "
+    return render_template('gerenciar.html', form=form, titulo=titulo.decode('utf-8'), dados=dados, tabela=tabela)
+
+
+@main.route('/editar_usuario', methods=['GET','POST'])
+def editar_usuario():
+    form = EditarUsuariosForm()
+    titulo = "Editar Usuários"
+    form.email.data = "nome@servidor.com"
+    form.nome.data = "Fulano de Tal"
+    form.telefone.data = "(88)99999-9999"
+    form.lattes.data = "http://www.lathes.com/fulano"
+    if request.method == 'POST':
+        flash(u"Usuário editado com sucesso")
+        return redirect(url_for('main.gerenciar_usuario'))
+    return render_template('editar.html', form=form, titulo=titulo.decode('utf-8'))
+
+@main.route('/excluir_usuario')
+def excluir_usuario():
+    flash(u"Usuário excluído com sucesso")
+    return redirect(url_for('main.gerenciar_usuario'))
+
+#Caso de Uso 8
+@main.route('/gerenciar_disciplina', methods=['GET', 'POST'])
+def gerenciar_disciplina():
+    tabela = 'disciplina'
+    form = CadastroDisciplinaForm()
+    titulo = "Cadastro de Disciplina"
+    dados = [
+      {'Nome' : 'Engenharia de Software',
+        'CH' : '80',
+        'Fluxo' : '2016.1'},
+       {'Nome' : u'Cálculo I',
+         'CH' : '80',
+         'Fluxo' : '2012.1'},
+        {'Nome' : u'Laboratório de Desenvolvimento de Software',
+          'CH' : '80',
+          'Fluxo' : '2016.1'}
+    ]
+    if request.method == 'POST':
+        fluxo = ['2012.1', '2016.1']
+        dados.append(
+          {'Nome' : form.nome.data,
+          'CH' : form.cargaHoraria.data,
+          'Fluxo' : fluxo[int(form.fluxo.data)-1]}
+        )
+        return render_template('gerenciar.html', form=form, titulo=titulo.decode('utf-8'), dados=dados, tabela=tabela)
+    form.nome.data = " "
+    form.cargaHoraria.data = " "
+    return render_template('gerenciar.html', form=form, titulo=titulo.decode('utf-8'), dados=dados, tabela=tabela)
+
+
+@main.route('/editar_disciplina', methods=['GET','POST'])
+def editar_disciplina():
+    form = EditarDisciplinaForm()
+    titulo = "Editar Disciplina"
+    form.nome.data = u"Cálculo I"
+    form.cargaHoraria.data = "80"
+    if request.method == 'POST':
+        flash(u"Disciplina editada com sucesso")
+        return redirect(url_for('main.gerenciar_disciplina'))
+    return render_template('editar.html', form=form, titulo=titulo.decode('utf-8'))
+
+@main.route('/excluir_disciplina')
+def excluir_disciplina():
+    flash(u"Disciplina excluída com sucesso")
+    return redirect(url_for('main.gerenciar_disciplina'))
+
+#Caso de Uso 9
+@main.route('/gerenciar_fluxo', methods=['GET', 'POST'])
+def gerenciar_fluxo():
+    tabela = 'fluxo'
+    form = CadastroFluxoForm()
+    titulo = "Cadastro de Fluxo"
+    dados = [
+      {'Fluxo' : '2016.1'},
+      {'Fluxo' : '2012.1'}
+    ]
+    if request.method == 'POST':
+        dados.append(
+          {'Fluxo' : form.fluxo.data}
+        )
+        return render_template('gerenciar.html', form=form, titulo=titulo.decode('utf-8'), dados=dados, tabela=tabela)
+    form.fluxo.data = " "
+    return render_template('gerenciar.html', form=form, titulo=titulo.decode('utf-8'), dados=dados, tabela=tabela)
+
+
+@main.route('/editar_fluxo', methods=['GET','POST'])
+def editar_fluxo():
+    form = EditarFluxoForm()
+    titulo = "Editar Fluxo"
+    form.fluxo.data = u"2012.1"
+    if request.method == 'POST':
+        flash(u"Fluxo editado com sucesso")
+        return redirect(url_for('main.gerenciar_fluxo'))
+    return render_template('editar.html', form=form, titulo=titulo.decode('utf-8'))
+
+@main.route('/excluir_fluxo')
+def excluir_fluxo():
+    flash(u"Fluxo excluído com sucesso")
+    return redirect(url_for('main.gerenciar_fluxo'))
+
+#Caso de Uso 10
+@main.route('/gerenciar_coordenacao', methods=['GET', 'POST'])
+def gerenciar_coordenacao():
+    tabela = 'coordenacao'
+    form = CadastroCoordenacaoForm()
+    titulo = "Cadastro de Coordenação"
+    dados = [
+      {'Nome' : u'Matemática'},
+      {'Nome' : u'Computação'}
+    ]
+    if request.method == 'POST':
+        dados.append(
+          {'Fluxo' : form.nome.data}
+        )
+        return render_template('gerenciar.html', form=form, titulo=titulo.decode('utf-8'), dados=dados, tabela=tabela)
+    form.nome.data = " "
+    return render_template('gerenciar.html', form=form, titulo=titulo.decode('utf-8'), dados=dados, tabela=tabela)
+
+
+@main.route('/editar_coordenacao', methods=['GET','POST'])
+def editar_coordenacao():
+    form = EditarCoordenacaoForm()
+    titulo = "Editar Coordenação"
+    form.nome.data = u"Matemática"
+    if request.method == 'POST':
+        flash(u"Coordenação editada com sucesso")
+        return redirect(url_for('main.gerenciar_coordenacao'))
+    return render_template('editar.html', form=form, titulo=titulo.decode('utf-8'))
+
+@main.route('/excluir_coordenacao')
+def excluir_coordenacao():
+    flash(u"Coordenação excluída com sucesso")
+    return redirect(url_for('main.gerenciar_coordenacao'))
+
+
+#Caso de Uso 11
+@main.route('/gerenciar_sala', methods=['GET', 'POST'])
+def gerenciar_sala():
+    tabela = 'sala'
+    form = CadastroSalaForm()
+    titulo = "Cadastro de Salas"
+    dados = [
+      {
+        u'Número' : u'45',
+        u'Tipo' : u'Padrão',
+        u'Campus' : u'Betânia',
+        u'Descrição' : u'Sala usada pelo curso de direito'
+      },
+      {
+        u'Número' : u'1',
+        u'Tipo' : u'Laboratório',
+        u'Campus' : u'Cidao',
+        u'Descrição' : u'Sala usada pelo curso de Computação'
+      },
+
+    ]
+    if request.method == 'POST':
+        dados.append(
+          {
+            u'Número' : form.numero.data,
+            u'Tipo' : form.tipo.data,
+            u'Campus' : form.campus.data,
+            u'Descrição' : form.descricao.data
+          }
+        )
+        return render_template('gerenciar.html', form=form, titulo=titulo.decode('utf-8'), dados=dados, tabela=tabela)
+    form.numero.data = " "
+    form.descricao.data = " "
+    return render_template('gerenciar.html', form=form, titulo=titulo.decode('utf-8'), dados=dados, tabela=tabela)
+
+
+@main.route('/editar_sala', methods=['GET','POST'])
+def editar_sala():
+    form = EditarSalaForm()
+    titulo = "Editar Sala"
+    form.numero.data = "45"
+    form.descricao.data = 'Sala usada pelo curso de direito'
+    if request.method == 'POST':
+        flash(u"Sala editada com sucesso")
+        return redirect(url_for('main.gerenciar_sala'))
+    return render_template('editar.html', form=form, titulo=titulo.decode('utf-8'))
+
+@main.route('/excluir_sala')
+def excluir_sala():
+    flash(u"Sala excluída com sucesso")
+    return redirect(url_for('main.gerenciar_sala'))
+
+# Caso de uso 012
+@main.route('/auditoria', methods=['GET','POST'])
+def auditoria():
+    form = AuditoriaForm()
+    exibir_form = True
+    dados = []
+    if form.validate_on_submit():
+        exibir_form = False
+        dados = [
+            {u'Data do Evento' : form.data_inicio.data ,
+            'Email' : 'usuario@servidor.com',
+            u'Operação' : u'Cadastrar Usuário',
+            'Dado' : u'Usuário XPTO'},
+            {u'Data do Evento' : form.data_inicio.data ,
+            'Email' : 'usuario@servidor.com',
+            u'Operação' : u'Imprimir Salas',
+            'Dado' : u'Todos'},
+            {u'Data do Evento' : form.data_fim.data ,
+            'Email' : 'usuario@servidor.com',
+            u'Operação' : u'Editar Lotação',
+            'Dado' : u'2017.2'},
+        ]
+        return render_template('auditoria.html', form=form, dados=dados, exibir_form=exibir_form)
+    return render_template('auditoria.html', form=form, dados=dados, exibir_form=exibir_form)
+
+# Caso de uso 013
+@main.route('/solicitar_professor', methods=['GET','POST'])
+def solicitar_professor():
+    form = SolicitarProfessorForm()
+    exibir_form = True
+    titulo = "Solicitar Professor"
+    dados = []
+    if request.method == 'POST':
+        exibir_form = False
+        dados = [
+           [u'Adminstração', u'Computação', 'Segunda ABCD', u'João da Silva', u'17/04/2017',u'Pendente de aprovação'],
+           [u'Computação', u'Letras', 'Segunda ABCD', u'Rosa',  u'17/04/2017', u'Pendente de aprovação']
+        ]
+        return render_template('solicita.html', form=form, titulo=titulo.decode('utf-8'), exibir_form=exibir_form, dados=dados)
+    return render_template('solicita.html', form=form, titulo=titulo.decode('utf-8'), exibir_form=exibir_form, dados=dados)
+
+# Caso de uso 014 - aprovar solicitação
+@main.route('/aprovar_solcitacao')
+def aprovar_solcitacao():
+    form = None
+    exibir_form = False
+    titulo = "Aprovar Solicitação"
+    dados = [
+       [u'Adminstração', u'Computação', 'Segunda ABCD', u'João da Silva', u'17/04/2017',u'Pendente de aprovação'],
+       [u'Computação', u'Letras', 'Segunda ABCD', u'Rosa',  u'17/04/2017', u'Pendente de aprovação']
+    ]
+    return render_template('solicita.html', form=form, titulo=titulo.decode('utf-8'), exibir_form=exibir_form, dados=dados)
+# @main.route('/selecionar_usuario')
+# def selecionar_usuario():
+#     form = SelecionaEditarExcluirUsuarioForm()
+#     titulo = "Selecionar de Usuários"
+#     if form.validate_on_submit():
+#         pass
+#     return render_template('cadastro.html', form=form, titulo=titulo.decode('utf-8'))
+
+# @main.route('/editar_usuario')
+# def editar_usuario():
+#     form = EditarExcluirUsuarioForm()
+#     titulo = "Editar Usuários"
+#     if form.validate_on_submit():
+#         pass
+#     form.email.data = "email@.com.br"
+#     form.nome.data  = "Fulano de Tal"
+#     form.tipo.data = 3
+#     return render_template('editarExcluir.html', form=form, titulo=titulo.decode('utf-8'))
+
+# @main.route("/edicao_usuario_com_sucesso")
+# def edicao_usuario_com_sucesso():
+#     flash(u"Usuário editado com sucesso")
+#     return redirect(url_for('main.profile'))
+
+# @main.route('/excluir_usuario')
+# def excluir_usuario():
+#     form = EditarExcluirUsuarioForm()
+#     titulo = "Exluir Usuários"
+#     if form.validate_on_submit():
+#         pass
+#     form.email.data = "email@.com.br"
+#     form.nome.data  = "Fulano de Tal"
+#     form.tipo.data = 3
+#     return render_template('editarExcluir.html', form=form, titulo=titulo.decode('utf-8'))
+
+# @main.route("/exclusao_usuario_com_sucesso")
+# def exclusao_usuario_com_sucesso():
+#     flash(u"Usuário excluído com sucesso")
+#     return redirect(url_for('main.profile'))
+#
+# @main.route('/rel_usuarios')
+# def rel_usuarios():
+#     titulo = "Relatório de Usuarios"
+#     dados = [
+#       {
+#         'Nome' : u'José Alex Pontes Martins',
+#         'Email': 'alex@email.com',
+#         'Tipo': 'Coordenador'
+#       },
+#       {
+#         'Nome' : 'Thales Damasceno de Andrade',
+#         'Email': 'thales@email.com',
+#         'Tipo': 'Professor'
+#       },
+#       {
+#         'Nome' : u'João da Silva',
+#         'Carga': 'joao@email.com',
+#         'Tipo': 'Servidor'
+#       }
+#     ]
+#     return render_template('relatorio.html', titulo=titulo.decode('utf-8'), dados=dados)
+#
+# # Caso de Uso 10
+# @main.route('/cadastrar_disciplina')
+# def cadastrar_disciplina():
+#     form = CadastroDisicplinaForm()
+#     titulo = "Cadastro de Disciplina"
+#     if form.validate_on_submit():
+#         pass
+#     return render_template('cadastro.html', form=form, titulo=titulo.decode('utf-8'))
+#
+# @main.route('/selecionar_disciplina')
+# def selecionar_disciplina():
+#     form = SelecionarEditarExcluiDisicplinaForm()
+#     titulo = "Selecionar de Disciplina"
+#     if form.validate_on_submit():
+#         pass
+#     return render_template('cadastro.html', form=form, titulo=titulo.decode('utf-8'))
+#
+# @main.route('/editar_disciplina')
+# def editar_disciplina():
+#     form = EditarExcluirDisciplinaForm()
+#     titulo = "Editar Disciplina"
+#     if form.validate_on_submit():
+#         pass
+#     form.nome.data = "Engenharia de Software"
+#     form.cargaHoraria.data  = 80
+#     form.fluxo.data = 1
+#     return render_template('editarExcluir.html', form=form, titulo=titulo.decode('utf-8'))
+#
+# @main.route("/edicao_discplina_com_sucesso")
+# def edicao_disciplina_com_sucesso():
+#     flash(u"Disciplina editada com sucesso")
+#     return redirect(url_for('main.profile'))
+#
+# @main.route('/excluir_disciplina')
+# def excluir_disciplina():
+#     form = EditarExcluirDisciplinaForm()
+#     titulo = "Exluir Disciplina"
+#     if form.validate_on_submit():
+#         pass
+#     form.nome.data = "Engenharia de Software"
+#     form.cargaHoraria.data  = 80
+#     form.fluxo.data = 1
+#     return render_template('editarExcluir.html', form=form, titulo=titulo.decode('utf-8'))
+#
+# @main.route("/exclusao_disciplina_com_sucesso")
+# def exclusao_disciplina_com_sucesso():
+#     flash(u"Disciplina excluída com sucesso")
+#     return redirect(url_for('main.profile'))
+#
+# @main.route('/rel_diciplinas')
+# def rel_disciplinas():
+#     titulo = "Relatório de Discplinas"
+#     dados = [
+#       {
+#         'Nome' : 'Engenharia de Software',
+#         'Carga': '80',
+#         'Fluxo': '2016.1'
+#       },
+#       {
+#         'Nome' : u'Laboratório de Software',
+#         'Carga': '80',
+#         'Fluxo': '2016.1'
+#       },
+#       {
+#         'Nome' : 'Bancos de Dados I',
+#         'Carga': '80',
+#         'Fluxo': '2016.1'
+#       }
+#     ]
+#     return render_template('relatorio.html', titulo=titulo.decode('utf-8'), dados=dados)
+#
+#
+# #########################################
+
+#
+# @main.route('/lotacaoprof')
+# def lotacaoprof():
+#     form = LotacaoProfForm()
+#     if form.validate_on_submit():
+#         pass
+#         # user = User.query.filter_by(email=form.email.data).first()
+#         # if user is not None and user.verify_password(form.password.data):
+#         #     login_user(user, form.remember_me.data)
+#         #     return redirect(request.args.get('next') or url_for('main.index'))
+#         # flash('Invalid username or password.')
+#     return render_template('re_lotacao.html', form=form)
+#
+#
+#
+#
+#
+#
+#
+#
+#
+#
+# # Gerenciar Coordenacoes
+# @main.route('/incluir_coordenacao')
+# def incluir_cordencao():
+#     form = IncluirCoordenacaoForm()
+#     if form.validate_on_submit():
+#         pass
+#         # user = User.query.filter_by(email=form.email.data).first()
+#         # if user is not None and user.verify_password(form.password.data):
+#         #     login_user(user, form.remember_me.data)
+#         #     return redirect(request.args.get('next') or url_for('main.index'))
+#         # flash('Invalid username or password.')
+#     return render_template('incluir_coordenacao.html', form=form)
+#
+# @main.route('/selecionar_coordenacao')
+# def selecionar_coordenacao():
+#     form = SelecionarCoordenacaoForm()
+#     if form.validate_on_submit():
+#         pass
+#         # user = User.query.filter_by(email=form.email.data).first()
+#         # if user is not None and user.verify_password(form.password.data):
+#         #     login_user(user, form.remember_me.data)
+#         #     return redirect(request.args.get('next') or url_for('main.index'))
+#         # flash('Invalid username or password.')
+#     return render_template('alterar_coordenacao.html', form=form)
+#
+# @main.route('/alterar_coordenacao')
+# def alterar_coordenacao():
+#     form = IncluirCoordenacaoForm()
+#     if form.validate_on_submit():
+#         pass
+#         # user = User.query.filter_by(email=form.email.data).first()
+#         # if user is not None and user.verify_password(form.password.data):
+#         #     login_user(user, form.remember_me.data)
+#         #     return redirect(request.args.get('next') or url_for('main.index'))
+#         # flash('Invalid username or password.')
+#     return render_template('alterar_coordenacao.html', form=form)
+#
+# @main.route('/excluir_coordenacao0')
+# def excluir_coordenacao0():
+#     form = SelecionarCoordenacaoForm()
+#     if form.validate_on_submit():
+#         pass
+#         # user = User.query.filter_by(email=form.email.data).first()
+#         # if user is not None and user.verify_password(form.password.data):
+#         #     login_user(user, form.remember_me.data)
+#         #     return redirect(request.args.get('next') or url_for('main.index'))
+#         # flash('Invalid username or password.')
+#     return render_template('excluir_coordenacao.html', form=form)
+#
+# @main.route('/excluir_coordenacao')
+# def excluir_coordenacao():
+#     form = IncluirCoordenacaoForm()
+#     if form.validate_on_submit():
+#         pass
+#         # user = User.query.filter_by(email=form.email.data).first()
+#         # if user is not None and user.verify_password(form.password.data):
+#         #     login_user(user, form.remember_me.data)
+#         #     return redirect(request.args.get('next') or url_for('main.index'))
+#         # flash('Invalid username or password.')
+#     return render_template('excluir_coordenacao.html', form=form)
+#
+# @main.route('/rel_coordenacoes')
+# def rel_coordenacoes():
+#     return render_template('re_coordenacoes.html')

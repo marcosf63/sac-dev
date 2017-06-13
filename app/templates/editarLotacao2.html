@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block title %}SAC{% endblock %}
+
+{% block page_content %}
+  <div class="page-header">
+      <h1>{{ titulo }}</h1>
+  </div>
+  <div class="row">
+    <div class="col-md-4">
+      <form method="post" class="form" role="form">
+         {{ form.csrf_token }}
+         <div class="form-group ">
+             {{ form.coordenacao.label }}
+             {{ form.coordenacao}}
+         </div>
+        <div class="form-group ">
+           {{ form.professor.label }}
+           {{ form.professor }}
+        </div>
+       <div class="form-group ">
+          {{ form.sala.label }}
+          {{ form.sala(size=3) }}
+       </div>
+
+       {{ form.submit}}
+
+     </form>
+   </div>
+  </div>
+
+ <div class="row">
+   <div class="page-header">
+       <h1>Ofertas Ciencias da Computação - Bacharelado - Semestre: 2016.2</h1>
+   </div>
+   <div class="col-md-12">
+     <table class="table table-bordered">
+       <thead>
+       <tr>
+         <th>Periodo</th>
+         <th>Disciplina</th>
+         <th>Fluxo</th>
+         <th>Turma</th>
+         <th>CH</th>
+         <th>Vagas</th>
+         <th>Professor</th>
+         <th>Sala</th>
+         <th>Horário</th>
+       </tr>
+     </thead>
+     <tbody>
+       <tr>
+         <td>1o</td>
+         <td>Engenharia de Software</td>
+         <td>2012.1</td>
+         <td>1</td>
+         <td>60</td>
+         <td>40</td>
+         <td></td>
+         <td></td>
+         <td></td>
+       </tr>
+     </tbody>
+  </div>
+ </div>
+
+{% endblock %}

@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+
+{% block title %}SAC{% endblock %}
+{% block navbar %}
+  <div class="jumbotron">
+    <h1>Protótipo</h1>
+  </div>
+{% endblock %}
+{% block page_content %}
+<div class="page-header">
+    <h1>Caso de Uso</h1>
+    {% for caso in casos %}
+      <p>{{ caso }}</p>
+      <!-- {% if loop.index == 1 %}
+        <ul>
+          <li><a href="{{ url_for('main.index') }}">Tela 1</a></li>
+          <li><a href="{{ url_for('main.home') }}">Tela 2</a></li>
+        </ul>
+      {% endif %}
+      {% if loop.index == 2 %}
+        <ul>
+          <li><a href="{{ url_for('main.home') }}">Tela 1</a></li>
+          <li><a href="{{ url_for('main.alocar01') }}">Tela 2</a></li>
+          <li><a href="{{ url_for('main.alocar02') }}">Tela 3</a></li>
+          <li><a href="{{ url_for('main.alocar03') }}">Tela 4</a></li>
+        </ul>
+      {% endif %}
+      {% if loop.index == 3 %}
+        <ul>
+          <li><a href="{{ url_for('main.home') }}">Tela 1</a></li>
+          <li><a href="{{ url_for('main.rel_lotacao_por_periodo') }}">Tela 2</a></li>
+          <li><a href="{{ url_for('main.rel_lotacao_por_periodo_2') }}">Tela 3</a></li>
+        </ul>
+      {% endif %}
+      {% if loop.index == 4 %}
+        <ul>
+          <li><a href="{{ url_for('main.home') }}">Tela 1</a></li>
+          <li><a href="{{ url_for('main.rel_lotacao_por_dia') }}">Tela 2</a></li>
+          <li><a href="{{ url_for('main.rel_lotacao_por_dia_2') }}">Tela 3</a></li>
+        </ul>
+      {% endif %}
+      {% if loop.index == 5 %}
+        <ul>
+          <li><a href="{{ url_for('main.home') }}">Tela 1</a></li>
+          <li><a href="{{ url_for('main.rel_lotacao_por_turno') }}">Tela 2</a></li>
+          <li><a href="{{ url_for('main.rel_lotacao_por_turno_2') }}">Tela 3</a></li>
+        </ul>
+      {% endif %}
+      {% if loop.index == 6 %}
+        <ul>
+          <li><a href="{{ url_for('main.home') }}">Tela 1</a></li>
+          <li><a href="{{ url_for('main.rel_PROGRAD') }}">Tela 2</a></li>
+        </ul>
+      {% endif %}
+      {% if loop.index == 7 %}
+        <ul>
+          <li><a href="{{ url_for('main.home') }}">Tela 1</a></li>
+          <li><a href="{{ url_for('main.rel_cedidos') }}">Tela 2</a></li>
+        </ul>
+      {% endif %}
+      {% if loop.index == 8 %}
+        <ul>
+          <li><a href="{{ url_for('main.home') }}">Tela 1</a></li>
+          <li><a href="{{ url_for('main.rel_lotacao_por_professor') }}">Tela 2</a></li>
+          <li><a href="{{ url_for('main.rel_lotacao_por_professor_2') }}">Tela 3</a></li>
+        </ul>
+      {% endif %}
+      {% if loop.index == 9 %}
+        <ul>
+          <li><a href="{{ url_for('main.home') }}">Tela 1</a></li>
+          <li><a href="{{ url_for('main.cadastrar_usuario') }}">Tela 2</a></li>
+          <li><a href="{{ url_for('main.selecionar_usuario') }}">Tela 3</a></li>
+          <li><a href="{{ url_for('main.editar_usuario') }}">Tela 4</a></li>
+          <li><a href="{{ url_for('main.edicao_usuario_com_sucesso') }}">Tela 5</a></li>
+          <li><a href="{{ url_for('main.excluir_usuario') }}">Tela 6</a></li>
+          <li><a href="{{ url_for('main.exclusao_usuario_com_sucesso') }}">Tela 7</a></li>
+          <li><a href="{{ url_for('main.rel_usuarios') }}">Tela 8</a></li>
+        </ul>
+      {% endif %}
+      {% if loop.index == 10 %}
+        <ul>
+          <li><a href="{{ url_for('main.home') }}">Tela 1</a></li>
+          <li><a href="{{ url_for('main.cadastrar_disciplina') }}">Tela 2</a></li>
+          <li><a href="{{ url_for('main.selecionar_disciplina') }}">Tela 3</a></li>
+          <li><a href="{{ url_for('main.editar_disciplina') }}">Tela 4</a></li>
+          <li><a href="{{ url_for('main.edicao_disciplina_com_sucesso') }}">Tela 5</a></li>
+          <li><a href="{{ url_for('main.excluir_disciplina') }}">Tela 6</a></li>
+          <li><a href="{{ url_for('main.exclusao_disciplina_com_sucesso') }}">Tela 7</a></li>
+          <li><a href="{{ url_for('main.rel_disciplinas') }}">Tela 8</a></li>
+        </ul>
+      {% endif %}
+    {% endfor %} -->
+</div>
+{% endblock %}

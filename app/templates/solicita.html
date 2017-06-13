@@ -1,0 +1,290 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}SAC{% endblock %}
+
+{% block page_content %}
+  <div class="page-header">
+      <h1>{{ titulo }}</h1>
+  </div>
+  {% if exibir_form %}
+  <div class="row">
+    <div class="col-md-4">
+     <form class="form form-horizontal" method="post" role="form">
+        {{ form.csrf_token }}
+        {{ wtf.form_errors(form, hiddens="only") }}
+
+        {{ wtf.form_field(form.coordenacao) }}
+        {{ wtf.form_field(form.professor) }}
+     </div>
+  </div>
+
+
+  <!-- Segunda -->
+  <div class="row well">
+      <div class="borda">
+        <label class="control-label">Segunda</label>
+      </div>
+
+      <div class="col-md-4">
+
+
+            {{ form.segunda_manha.label }} :
+            {% for campo in form.segunda_manha %}&nbsp;
+              {% if campo.name != 'segunda_manha-csrf_token' %}
+                {{ campo.label }}&nbsp;{{ campo }}
+              {% endif %}
+            {% endfor %}
+      </div>
+      <div class="col-md-4">
+
+
+            {{ form.segunda_tarde.label }} :
+            {% for campo in form.segunda_tarde %}&nbsp;
+              {% if campo.name != 'segunda_tarde-csrf_token' %}
+                {{ campo.label }}&nbsp;{{ campo }}
+              {% endif %}
+            {% endfor %}
+      </div>
+      <div class="col-md-4">
+
+
+            {{ form.segunda_noite.label }} :
+            {% for campo in form.segunda_noite %}&nbsp;
+              {% if campo.name != 'segunda_noite-csrf_token' %}
+                {{ campo.label }}&nbsp;{{ campo }}
+              {% endif %}
+            {% endfor %}
+      </div>
+  </div>
+  <!-- Fim segunda -->
+  <!-- terca -->
+  <div class="row well">
+      <div class="borda">
+        <label class="control-label">Terça</label>
+      </div>
+
+      <div class="col-md-4">
+
+
+            {{ form.terca_manha.label }} :
+            {% for campo in form.terca_manha %}&nbsp;
+              {% if campo.name != 'terca_manha-csrf_token' %}
+                {{ campo.label }}&nbsp;{{ campo }}
+              {% endif %}
+            {% endfor %}
+      </div>
+      <div class="col-md-4">
+
+
+            {{ form.terca_tarde.label }} :
+            {% for campo in form.terca_tarde %}&nbsp;
+              {% if campo.name != 'terca_tarde-csrf_token' %}
+                {{ campo.label }}&nbsp;{{ campo }}
+              {% endif %}
+            {% endfor %}
+      </div>
+      <div class="col-md-4">
+
+
+            {{ form.terca_noite.label }} :
+            {% for campo in form.terca_noite %}&nbsp;
+              {% if campo.name != 'terca_noite-csrf_token' %}
+                {{ campo.label }}&nbsp;{{ campo }}
+              {% endif %}
+            {% endfor %}
+      </div>
+  </div>
+  <!-- Fim terca -->
+  <!-- quarta -->
+  <div class="row well">
+      <div class="borda">
+        <label class="control-label">Quarta</label>
+      </div>
+
+      <div class="col-md-4">
+
+
+            {{ form.quarta_manha.label }} :
+            {% for campo in form.quarta_manha %}&nbsp;
+              {% if campo.name != 'quarta_manha-csrf_token' %}
+                {{ campo.label }}&nbsp;{{ campo }}
+              {% endif %}
+            {% endfor %}
+      </div>
+      <div class="col-md-4">
+
+
+            {{ form.quarta_tarde.label }} :
+            {% for campo in form.quarta_tarde %}&nbsp;
+              {% if campo.name != 'quarta_tarde-csrf_token' %}
+                {{ campo.label }}&nbsp;{{ campo }}
+              {% endif %}
+            {% endfor %}
+      </div>
+      <div class="col-md-4">
+
+
+            {{ form.quarta_noite.label }} :
+            {% for campo in form.quarta_noite %}&nbsp;
+              {% if campo.name != 'quarta_noite-csrf_token' %}
+                {{ campo.label }}&nbsp;{{ campo }}
+              {% endif %}
+            {% endfor %}
+      </div>
+  </div>
+  <!-- Fim quarta -->
+  <!-- quinta -->
+  <div class="row  well">
+      <div class="borda">
+        <label class="control-label">Quinta</label>
+      </div>
+
+      <div class="col-md-4">
+
+
+            {{ form.quinta_manha.label }} :
+            {% for campo in form.quinta_manha %}&nbsp;
+              {% if campo.name != 'quinta_manha-csrf_token' %}
+                {{ campo.label }}&nbsp;{{ campo }}
+              {% endif %}
+            {% endfor %}
+      </div>
+      <div class="col-md-4">
+
+
+            {{ form.quinta_tarde.label }} :
+            {% for campo in form.quinta_tarde %}&nbsp;
+              {% if campo.name != 'quinta_tarde-csrf_token' %}
+                {{ campo.label }}&nbsp;{{ campo }}
+              {% endif %}
+            {% endfor %}
+      </div>
+      <div class="col-md-4">
+
+
+            {{ form.quinta_noite.label }} :
+            {% for campo in form.quinta_noite %}&nbsp;
+              {% if campo.name != 'quinta_noite-csrf_token' %}
+                {{ campo.label }}&nbsp;{{ campo }}
+              {% endif %}
+            {% endfor %}
+      </div>
+  </div>
+  <!-- Fim quinta -->
+  <!-- sexta -->
+  <div class="row well">
+      <div class="borda">
+        <label class="control-label">Sexta</label>
+      </div>
+
+      <div class="col-md-4">
+
+
+            {{ form.sexta_manha.label }} :
+            {% for campo in form.sexta_manha %}&nbsp;
+              {% if campo.name != 'sexta_manha-csrf_token' %}
+                {{ campo.label }}&nbsp;{{ campo }}
+              {% endif %}
+            {% endfor %}
+      </div>
+      <div class="col-md-4">
+
+
+            {{ form.sexta_tarde.label }} :
+            {% for campo in form.sexta_tarde %}&nbsp;
+              {% if campo.name != 'sexta_tarde-csrf_token' %}
+                {{ campo.label }}&nbsp;{{ campo }}
+              {% endif %}
+            {% endfor %}
+      </div>
+      <div class="col-md-4">
+
+
+            {{ form.sexta_noite.label }} :
+            {% for campo in form.sexta_noite %}&nbsp;
+              {% if campo.name != 'sexta_noite-csrf_token' %}
+                {{ campo.label }}&nbsp;{{ campo }}
+              {% endif %}
+            {% endfor %}
+      </div>
+  </div>
+  <!-- Fim sexta -->
+  <!-- sabado -->
+  <div class="row well">
+      <div class="borda">
+        <label class="control-label">Sábado</label>
+      </div>
+
+      <div class="col-md-4">
+
+
+            {{ form.sabado_manha.label }} :
+            {% for campo in form.sabado_manha %}&nbsp;
+              {% if campo.name != 'sabado_manha-csrf_token' %}
+                {{ campo.label }}&nbsp;{{ campo }}
+              {% endif %}
+            {% endfor %}
+      </div>
+      <div class="col-md-4">
+
+
+            {{ form.sabado_tarde.label }} :
+            {% for campo in form.sabado_tarde %}&nbsp;
+              {% if campo.name != 'sabado_tarde-csrf_token' %}
+                {{ campo.label }}&nbsp;{{ campo }}
+              {% endif %}
+            {% endfor %}
+      </div>
+      <div class="col-md-4">
+
+
+            {{ form.sabado_noite.label }} :
+            {% for campo in form.sabado_noite %}&nbsp;
+              {% if campo.name != 'sabado_noite-csrf_token' %}
+                {{ campo.label }}&nbsp;{{ campo }}
+              {% endif %}
+            {% endfor %}
+      </div>
+  </div>
+  <!-- Fim sabado -->
+  <br>
+      {{ wtf.form_field(form.submit) }}
+</form>
+  </div>
+{% else %}
+<div class="col-md-12">
+  <table class="table table-bordered">
+    <thead>
+    <tr>
+      <th>Coordenação de origem</th>
+      <th>Coordenação de origem</th>
+      <th>Horário</th>
+      <th>Professor</th>
+      <th>Data</th>
+      <th>Situação</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for dado in dados %}
+      {% for col in dado %}
+
+          <td>{{ col }}</td>
+
+
+      {% endfor %}
+           <td><a href="#">Editar</a></td>
+           <td><a href="#">Exluir</a></td>
+           <td><a href="#">Aprovar</a></td>
+           <td><a href="#">Rejeitar</a></td>
+      </tr>
+
+    {% endfor %}
+
+  </tbody>
+{% endif %}
+{% endblock %}

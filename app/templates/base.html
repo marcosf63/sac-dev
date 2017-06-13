@@ -1,0 +1,164 @@
+{% extends "bootstrap/base.html" %}
+
+{% block title %}SAC{% endblock %}
+
+{% block head %}
+{{ super() }}
+<meta charset="utf-8">
+<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+<link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap-submenu.min.css')}}">
+<style>
+  .dropdown-submenu {
+    position: relative;
+  }
+  .dropdown-submenu .dropdown-menu {
+    top: 0;
+    left: 100%;
+    margin: -1px
+  }
+  .borda {
+    border-top-style: 1px solid;
+    border-left-style: 1px solid;
+    border-right-style: 1px solid;
+    border-bottom-style: 1px solid;
+  }
+  .well {
+    min-height: 10px;
+    padding: 10px;
+    margin-bottom: 20px;
+    background-color: #ffffff;
+  }
+
+</style>
+{% endblock %}
+
+{% block navbar %}
+<div class="navbar navbar-inverse" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="{{ url_for('main.index') }}">SAC</a>
+        </div>
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Lotação<span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                  <li><a href="{{ url_for('main.lotacao') }}">Lotar professores nas disciplina</a></li>
+                  <!-- <li><a href="#">Copiar Locação (semestres anteriores)</a></li> -->
+                  <li><a href="{{ url_for('main.rel_PROGRAD') }}">Emitir Relatório para PROGRAD</a></li>
+                  <li><a href="{{ url_for('main.rel_lotacao_por_professor') }}">Lotação do Professor</a></li>
+                  <li><a href="{{ url_for('main.solicitar_professor') }}">Solicitar Professor</a></li>
+                  <li><a href="{{ url_for('main.aprovar_solcitacao') }}">Aprovar Solicitação</a></li>
+                </ul>
+              </li>
+              <li class="dropdown">
+                <a href="{{ url_for('main.gerenciar_usuario') }}" role="button">Gerenciar Usuários</a>
+                <!-- <ul class="dropdown-menu">
+                  <li><a href="#">Cadastrar Usuário</a></li>
+                  <li><a href="#">Editar Usuário</a></li>
+                  <li><a href="#">Excluir Usuário</a></li>
+                  <li><a href="#">Consultar Usuários</a></li>
+                </ul> -->
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Relatórios<span class="caret"></span></a>
+                  <ul class="dropdown-menu">
+                    <li><a href="{{ url_for('main.rel_lotacao_por') }}">Lotação</a></li>
+                    <li><a href="{{ url_for('main.rel_cedidos') }}">Professores cedidos</a></li>
+                    <li><a href="{{ url_for('main.auditoria') }}">Auditoria</a></li>
+                  </ul>
+                </li>
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Administrar Cadastros<span class="caret"></span></a>
+                  <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                    <li>
+                      <a href="{{ url_for('main.gerenciar_disciplina') }}">Gerenciar Disciplinas</a>
+
+                    </li>
+                    <li >
+                      <a href="{{ url_for('main.gerenciar_fluxo') }}">Gerenciar Fluxos</a>
+
+                    </li>
+                    <li>
+                      <a href="{{ url_for('main.gerenciar_coordenacao') }}">Gerenciar Coordenações</a>
+
+                    </li>
+                    <li>
+                      <a href="{{ url_for('main.gerenciar_sala') }}">Gerenciar Salas</a>
+
+                    </li>
+                  </ul>
+                </li>
+              </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                {% if current_user.is_authenticated %}
+                <li><a href="{{ url_for('auth.logout') }}">Sair</a></li>
+                {% else %}
+                <!-- <li><a href="{{ url_for('auth.login') }}">Entrar</a></li> -->
+                <li><a href="{{ url_for('auth.logout') }}">Sair</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    {% for message in get_flashed_messages() %}
+    <div class="alert alert-warning">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        {{ message }}
+    </div>
+    {% endfor %}
+
+    {% block page_content %}{% endblock %}
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+{{ moment.include_moment() }}
+ <script src="{{ url_for('static', filename='js/bootstrap-submenu.js')}}" defer></script>
+ <script>
+ $(document).ready(function(){
+  //  $('[data-submenu]').submenupicker();
+   //
+  //  $('#1').hover(function(){
+  //     $(this).toggleClass('open');
+  //  });
+  //  $('#2').hover(function(){
+  //     $(this).toggleClass('open');
+  //  });
+  //  $('#3').hover(function(){
+  //     $(this).toggleClass('open');
+  //  });
+
+   var $tipo_relatorio = $('.form-group:eq(0) #tipo').val()
+    $('.form-group:eq(' + $tipo_relatorio + ')').removeClass('hidden');
+
+   $('.form-group:eq(0) #tipo').change(function(){
+     $('.form-group:eq(' + $tipo_relatorio + ')').addClass('hidden');
+     var $tipo_relatorio_atual = $('.form-group:eq(0) #tipo').val();
+     $('.form-group:eq(' + $tipo_relatorio_atual + ')').removeClass('hidden');
+     $tipo_relatorio = $tipo_relatorio_atual;
+   });
+
+   $('#excluir').click(function(){
+     confirm("Tem certeza que deseja excluir o {{ tabela }} Fulano de Tal?");
+   });
+
+
+ });
+ </script>
+
+
+
+{% endblock %}

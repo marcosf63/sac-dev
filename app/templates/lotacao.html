@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}SAC{% endblock %}
+
+{% block page_content %}
+  <div class="row">
+    <div class="page-header">
+        <h1>Incluir uma Nova Lotação</h1>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-4">
+        {{ wtf.quick_form(form) }}
+        
+    </div>
+  </div>
+  <br>
+  <div class="row">
+    <div class="col-md-6">
+      <h3>Lotações Cadastradas</h3>
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <td>Semestre</td>
+            <td>Situacao</td>
+            <td></td>
+            <td></td>
+          </tr>
+        </thead>
+        <tbody>
+          {% for semestre in semestres %}
+            <tr>
+            {% for chave in semestre %}
+              <td>{{ semestre[chave] }}</td>
+
+            {% endfor %}
+            {% if semestre['situacao']!='Finalizada' %}
+              <td><a href="{{ url_for('main.editar_lotacao') }}">Editar</a></td>
+              <td><a href="#">Excluir</a></td>
+            {% else %}
+              <td><a href="#">Consultar</a></td>
+              <td><a href="#">Copiar para uma Nova</a></td>
+            {% endif %}
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+{% endblock %}

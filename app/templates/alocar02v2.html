@@ -1,0 +1,271 @@
+<html><head>
+
+    <title>SAC</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap -->
+    <link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet" media="screen">
+<meta charset="utf-8">
+<link rel="shortcut icon" href="/static/favicon.ico" type="image/x-icon">
+<link rel="icon" href="/static/favicon.ico" type="image/x-icon">
+
+  </head>
+  <body>
+
+<div class="navbar navbar-inverse" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">SAC</a>
+        </div>
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Alocação<span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                  <li><a href="/alocar01">Alocar professores as disciplina</a></li>
+                  <li><a href="#">Emitir Relatório para PROGRAD</a></li>
+                  <li><a href="/lotacaoprof">Lotação do Professor</a></li>
+                </ul>
+              </li>
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Controle Acesso<span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                  <li><a href="#">Incluir Usuário</a></li>
+                  <li><a href="#">Editar Usuário</a></li>
+                  <li><a href="#">Excluir Usuário</a></li>
+                  <li><a href="#">Consultar Usuários</a></li>
+                </ul>
+                </li><li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Relatórios<span class="caret"></span></a>
+                  <ul class="dropdown-menu">
+                    <li><a href="#">Lotação por período</a></li>
+                    <li><a href="#">Lotação por dia</a></li>
+                    <li><a href="#">Lotação por turno</a></li>
+                    <li><a href="#">Professores cedidos</a></li>
+                    <li><a href="/auditoria">Auditoria</a></li>
+                  </ul>
+                </li>
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Administrar Tabelas<span class="caret"></span></a>
+                  <ul class="dropdown-menu">
+                    <li><a href="#">Gerenciar Disciplinas</a></li>
+                    <li><a href="#">Gerenciar Cursos</a></li>
+                    <li><a href="#">Gerenciar Coordenação</a></li>
+                    <li><a href="#">Gerenciar Salas</a></li>
+                  </ul>
+                </li>
+
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+
+                <!-- <li><a href="/auth/login">Entrar</a></li> -->
+                <li><a href="/auth/logout">Sair</a></li>
+
+            </ul>
+        </div>
+    </div>
+</div>
+
+
+<div class="container">
+
+
+
+  <div class="page-header">
+      <h1>Professor/Horario/Sala</h1>
+  </div>
+  <div class="col-md-6">
+
+<form method="post" class="form" role="form">
+  <input id="csrf_token" name="csrf_token" type="hidden" value="IjBkNTNhYTYyYTE1M2JmMDJjYTRkZGNkNmZlODgyNzkwNDZhY2Q1Y2Ei.C7gJOg.duLmXdldwN2zkKtN7bp7SkbjHRA">
+
+
+<div class="form-group "><label class="control-label" for="Professor">Selecione o Professor:</label>
+        <select class="form-control" id="Professor" name="Professor"><option value="1">Thales</option><option value="2">Alex</option><option value="3">Claudio</option><option value="4">Lorena</option><option value="5">Placido</option></select>
+  </div>
+
+
+
+<div class="form-group "><label class="control-label" for="Sala">Selecione a Sala:</label>
+        <select class="form-control" id="Sala" name="Sala"><option value="1">Sala 40</option><option value="2">Sala 39</option><option value="3">Sala 38</option><option value="4">Sala 37</option><option value="5">Lab Info</option></select>
+  </div>
+
+
+
+<div class="form-group "><label class="control-label" for="DiaSemana">Dia da Semana e horário:</label>
+        <select class="form-control" id="DiaSemana" name="DiaSemana"><option value="1">Segunda</option><option value="2">Terça</option><option value="3">Quarta</option><option value="4">Quinta</option><option value="5">Sexta</option><option value="6">Sabado</option></select>
+  </div>
+
+<div class="row">
+
+  <div class="col-md-2">
+    <label class="control-label">Manhã</label>
+    <div class="checkbox">
+      <label>
+        <input id="h1" name="h1" type="checkbox" value="y"> A
+      </label>
+    </div>
+
+    <div class="checkbox">
+      <label>
+        <input id="h2" name="h2" type="checkbox" value="y"> B
+      </label>
+    </div>
+
+    <div class="checkbox">
+      <label>
+        <input id="h3" name="h3" type="checkbox" value="y"> C
+      </label>
+    </div>
+    <div class="checkbox">
+      <label>
+        <input id="h4" name="h4" type="checkbox" value="y"> D
+      </label>
+    </div>
+    <div class="checkbox">
+      <label>
+        <input id="h5" name="h5" type="checkbox" value="y"> E
+      </label>
+    </div>
+    <div class="checkbox">
+      <label>
+        <input id="h5" name="h5" type="checkbox" value="y"> F
+      </label>
+    </div>
+  </div>
+
+  <div class="col-md-2">
+    <label class="control-label">Tarde</label>
+    <div class="checkbox">
+      <label>
+        <input id="h1" name="h1" type="checkbox" value="y"> G
+      </label>
+    </div>
+
+    <div class="checkbox">
+      <label>
+        <input id="h2" name="h2" type="checkbox" value="y"> H
+      </label>
+    </div>
+
+    <div class="checkbox">
+      <label>
+        <input id="h3" name="h3" type="checkbox" value="y"> I
+      </label>
+    </div>
+    <div class="checkbox">
+      <label>
+        <input id="h4" name="h4" type="checkbox" value="y"> J
+      </label>
+    </div>
+    <div class="checkbox">
+      <label>
+        <input id="h5" name="h5" type="checkbox" value="y"> K
+      </label>
+    </div>
+    <div class="checkbox">
+      <label>
+        <input id="h5" name="h5" type="checkbox" value="y"> L
+      </label>
+    </div>
+    <div class="checkbox">
+      <label>
+        <input id="h5" name="h5" type="checkbox" value="y"> M
+      </label>
+    </div>
+  </div>
+
+  <div class="col-md-2">
+    <label class="control-label">Noite</label>
+    <div class="checkbox">
+      <label>
+        <input id="h1" name="h1" type="checkbox" value="y"> N
+      </label>
+    </div>
+
+    <div class="checkbox">
+      <label>
+        <input id="h2" name="h2" type="checkbox" value="y"> O
+      </label>
+    </div>
+
+    <div class="checkbox">
+      <label>
+        <input id="h3" name="h3" type="checkbox" value="y"> P
+      </label>
+    </div>
+    <div class="checkbox">
+      <label>
+        <input id="h4" name="h4" type="checkbox" value="y"> Q
+      </label>
+    </div>
+    <div class="checkbox">
+      <label>
+        <input id="h5" name="h5" type="checkbox" value="y"> R
+      </label>
+    </div>
+    <div class="checkbox">
+      <label>
+        <input id="h5" name="h5" type="checkbox" value="y"> S
+      </label>
+    </div>
+  </div>
+
+
+</div>
+
+
+
+
+
+
+
+
+
+    <input class="btn btn-default" id="submit" name="submit" type="submit" value="Salvar">
+
+
+
+
+
+
+
+
+</form>
+  </div>
+
+
+</div>
+
+
+
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.0.3/js/bootstrap.min.js"></script>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/moment.js/2.3.1/moment-with-langs.min.js"></script>
+<script>
+function flask_moment_render(elem) {
+    $(elem).text(eval('moment("' + $(elem).data('timestamp') + '").' + $(elem).data('format') + ';'));
+    $(elem).removeClass('flask-moment');
+}
+function flask_moment_render_all() {
+    $('.flask-moment').each(function() {
+        flask_moment_render(this);
+        if ($(this).data('refresh')) {
+            (function(elem, interval) { setInterval(function() { flask_moment_render(elem) }, interval); })(this, $(this).data('refresh'));
+        }
+    })
+}
+$(document).ready(function() {
+    flask_moment_render_all();
+});
+</script>
+
+
+
+</body></html>

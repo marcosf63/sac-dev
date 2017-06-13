@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block title %}SAC{% endblock %}
+
+{% block page_content %}
+  <div class="page-header">
+      <h1>{{ titulo }}   <a class="btn btn-default" href="#" role="button">Imprimir</a></h1>
+  </div>
+  <div class="col-md-12">
+    <table class="table table-bordered">
+      <thead>
+      <tr>
+        {% for chave in dados[0] %}
+          <th>{{ chave }}</th>
+        {% endfor %}
+        <th></th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for dado in dados %}
+        <tr>
+        {% for chave in dado %}
+
+            <td>{{ dado[chave] }}</td>
+
+
+        {% endfor %}
+             <td><a href="#">Editar</a></td>
+             <td><a href="#">Exluir</a></td>
+        </tr>
+
+      {% endfor %}
+
+    </tbody>
+
+    </table>
+  </div>
+
+{% endblock %}
