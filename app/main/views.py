@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 from flask import render_template, redirect, url_for, flash, request
-from flask_login import login_required
+from flask_login import login_required, current_user
 from . import main
+from app import db
+from ..models import Lotacao, ItemLotacao, Disciplina
 from .forms import (
       SemestreForm,
       ProfHoraSalaForm,
@@ -37,60 +39,54 @@ from .forms import (
 import csv
 import os
 
-# # prototipo do sistemas
-# @main.route('/prototipo')
-# def prototipo():
-#     diretorio_atual = os.getcwd()
-#     casos = []
-#     print (diretorio_atual + '/app/static/casos_de_uso.csv')
-#     arquivocsv = open(diretorio_atual + '/app/static/casos_de_uso.csv')
-#     casos_de_uso = csv.DictReader(arquivocsv)
-#     for caso in casos_de_uso:
-#         casos.append(caso['casos'].decode('utf-8'))
-#     arquivocsv.close()
-#     return render_template('prototipo.html', casos=casos)
-
 #Caso de Uso 1
 @main.route('/')
 def index():
     return redirect(url_for('auth.login'))
 
 @main.route('/home')
+@login_required
 def home():
-    return render_template('index.html')
+    lotacoes = Lotacao.query.filter_by(coordenacao_id=current_user.coordenacao_id).all()
+    solicitacoes_pendentes = ItemLotacao.query.filter_by(
+        in_solitacao = 'S',
+        status_solcitacao_id = 1
+    ).all()
+    return render_template('index.html', lotacoes=lotacoes, solicitacoes_pendentes=solicitacoes_pendentes)
 
 #Caso de Uso 2
 @main.route('/lotacao', methods=['GET', 'POST'])
+@login_required
 def lotacao():
     form = SemestreForm()
-    semestres = [
-      {
-        'semestre': '2017.2',
-        'situacao': 'Em andamento',
-      },
-      {
-        'semestre': '2017.1',
-        'situacao': 'Em andamento',
-      },
-      {
-        'semestre': '2016.1',
-        'situacao': 'Finalizada',
-      }
-     ]
+    lotacoes = Lotacao.query.filter_by(coordenacao_id=current_user.coordenacao_id).all()
     if form.validate_on_submit():
-        semestres.insert(0, {'semestre': form.semestre.data, 'situacao' : 'Em andamento' })
+        lotacao = Lotacao(
+            semestre=form.semestre.data,
+            coordenacao_id=current_user.coordenacao_id,
+            situacao="Em andamento"
+        )
+        db.session.add(lotacao)
+        db.session.commit()
         form.semestre.data = ""
-        return render_template('lotacao.html', form=form, semestres=semestres)
-    return render_template('lotacao.html', form=form, semestres=semestres)
+        lotacoes = Lotacao.query.filter_by(coordenacao_id=current_user.coordenacao_id).all()
+        return render_template('lotacao.html', form=form, lotacoes=lotacoes)
+    return render_template('lotacao.html', form=form, lotacoes=lotacoes)
 
 
 
 #Caso de Uso 2
 @main.route('/editar_lotacao', methods=['GET', 'POST'])
+@login_required
 def editar_lotacao():
     titulo = "Editar Lotação - tela 1 de 3"
     form = LotacaoForm1()
-    if request.method == 'POST':
+    disciplinas = Disciplina.query.filter(Disciplina.periodo!='').all()
+    periodos = set([disciplina.periodo for disciplina in disciplinas])
+    form.periodo.choices = [(periodo, periodo) for periodo in periodos]
+    disciplinas_por_periodo = Disciplina.query.filter(Disciplina.periodo==1).all()
+    form.disciplina.choices = [(disciplina.nome,disciplina.nome) for disciplina in disciplinas_por_periodo]
+    if form.validate_on_submit():
         dados = {
             "periodo" : form.periodo.data,
             "disciplina" : form.disciplina.data,
@@ -101,6 +97,7 @@ def editar_lotacao():
 
 #Caso de Uso 2
 @main.route('/editar_lotacao2', methods=['GET', 'POST'])
+@login_required
 def editar_lotacao2():
     titulo = "Editar Lotação - tela 2 de 3"
     form = LotacaoForm2()
@@ -115,6 +112,7 @@ def editar_lotacao2():
 
 #Caso de Uso 2
 @main.route('/editar_lotacao3', methods=['GET', 'POST'])
+@login_required
 def editar_lotacao3():
     titulo = "Editar Lotação - tela 3 de 3"
     form = LotacaoForm3()

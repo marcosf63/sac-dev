@@ -12,15 +12,18 @@
   <div class="row">
     <div class="col-md-4">
         {{ wtf.quick_form(form) }}
-        
+
     </div>
   </div>
   <br>
   <div class="row">
     <div class="col-md-6">
       <h3>Lotações Cadastradas</h3>
-      <table class="table table-bordered">
+
+        {% if lotacoes %}
+        <table class="table table-bordered">
         <thead>
+
           <tr>
             <td>Semestre</td>
             <td>Situacao</td>
@@ -29,23 +32,25 @@
           </tr>
         </thead>
         <tbody>
-          {% for semestre in semestres %}
+          {% for lotacao in lotacoes %}
             <tr>
-            {% for chave in semestre %}
-              <td>{{ semestre[chave] }}</td>
-
-            {% endfor %}
-            {% if semestre['situacao']!='Finalizada' %}
-              <td><a href="{{ url_for('main.editar_lotacao') }}">Editar</a></td>
-              <td><a href="#">Excluir</a></td>
-            {% else %}
-              <td><a href="#">Consultar</a></td>
-              <td><a href="#">Copiar para uma Nova</a></td>
-            {% endif %}
+              <td>{{ lotacao.semestre }}</td>
+              <td>{{ lotacao.situacao }}</td>
+              {% if lotacao.situacao == 'Em andamento' %}
+                <td><a href="{{ url_for('main.editar_lotacao', lotacao_id='{{ lotacao.lotacao_id }}') }}">Editar</a></td>
+                <td><a href="#">Excluir</a></td>
+              {% else %}
+                <td><a href="{{ url_for('main.editar_lotacao', lotacao_id='{{ lotacao.lotacao_id }}') }}">Consultar</a></td>
+                <td><a href="{{ url_for('main.editar_lotacao', lotacao_id='{{ lotacao.lotacao_id }}', operacao='copiar') }}">Copiar para uma Nova</a></td>
+              {% endif %}
             </tr>
           {% endfor %}
         </tbody>
       </table>
+        {% else %}
+           <p>Não existem lotacoes cadastradas</p>
+        {% endif %}
+
     </div>
   </div>
 

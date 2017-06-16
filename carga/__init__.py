@@ -28,7 +28,7 @@ def carrega_disciplina(arquivo_csv):
         for linha in disciplinas:
             d = Disciplina()
             d.nome = unicode(linha[0],'utf-8')
-            d.perirodo = linha[1]
+            d.periodo = linha[1]
             d.carga_horaria = linha[2]
             d.fluxo_id = linha[3]
             d.in_obrigatorio = linha[4]

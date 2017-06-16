@@ -85,7 +85,7 @@ class Usuario(UserMixin, db.Model):
 
 @login_manager.user_loader
 def load_user(user_id):
-    return User.query.get(int(user_id))
+    return Usuario.query.get(int(user_id))
 
 class Coordenacao(db.Model):
     __tablename__ = 'coordenacoes'
@@ -135,6 +135,7 @@ class Lotacao(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     coordenacao_id = db.Column(db.Integer, db.ForeignKey('coordenacoes.id'))
     semestre = db.Column(db.String(64), unique=True)
+    situacao = db.Column(db.String(64)) # Encerrada, Em andamento.
     itens = db.relationship('ItemLotacao', backref='itens_lotacao2', lazy='dynamic')
 
     def __repr__(self):
@@ -144,6 +145,7 @@ class ItemLotacao(db.Model):
     __tablename__ = 'itens_lotacao'
     id = db.Column(db.Integer, primary_key=True)
     turma = db.Column(db.String(2), unique=True) # Turma 1, 2, A, B etc.
+    vagas = db.Column(db.Integer)
     in_solitacao = db.Column(db.String(1)) # S = Sim ou N = Nao
     status_solcitacao_id = db.Column(db.Integer, db.ForeignKey('status_solcitacoes.id'))
     lotacao_id = db.Column(db.Integer, db.ForeignKey('lotacoes.id'))

@@ -3,6 +3,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, SelectField, BooleanField, FormField, FieldList
 from wtforms.fields.html5 import DateField
 from wtforms.validators import Required, Length, Email
+from ..models import Disciplina
 
 turnos = [
   (1, u"MANHÃ"),
@@ -89,8 +90,8 @@ class SemestreForm(FlaskForm):
 
 
 class LotacaoForm1(FlaskForm):
-    periodo = SelectField(u'Selecione o Período:',choices=periodos)
-    disciplina = SelectField(u'Selecione a Desciplina:',choices=disciplinas)
+    periodo = SelectField(u'Selecione o Período:', choices=[])
+    disciplina = SelectField(u'Selecione a Desciplina:', choices=[])
     turma = StringField(u'Informe a Turma', validators=[Required(), Length(1,3)])
     vagas = StringField(u'Informe o numero de vagas', validators=[Required(), Length(1,3)])
     submit = SubmitField(u'Próximo')
