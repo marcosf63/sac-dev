@@ -3,7 +3,19 @@ from flask import render_template, redirect, url_for, flash, request
 from flask_login import login_required, current_user
 from . import main
 from app import db
-from ..models import Lotacao, ItemLotacao, Disciplina
+from ..models import (
+    Lotacao,
+    ItemLotacao,
+    Disciplina,
+    Dia,
+    Fluxo,
+    Coordenacao,
+    Usuario,
+    Sala,
+    UsuarioItemLotacao,
+    SalaItemLotacao
+)
+from ..funcoes import dia_horario, lista_itens_lotacao, gera_titulo
 from .forms import (
       SemestreForm,
       ProfHoraSalaForm,
@@ -33,7 +45,7 @@ from .forms import (
       turnos,
       LotacaoForm1,
       LotacaoForm2,
-      LotacaoForm3
+      LotacaoForm3,
 
 )
 import csv
@@ -47,7 +59,10 @@ def index():
 @main.route('/home')
 @login_required
 def home():
-    lotacoes = Lotacao.query.filter_by(coordenacao_id=current_user.coordenacao_id).all()
+    lotacoes = Lotacao.query.filter_by(
+        coordenacao_id=current_user.coordenacao_id,
+        situacao='Em andamento'
+    ).all()
     solicitacoes_pendentes = ItemLotacao.query.filter_by(
         in_solitacao = 'S',
         status_solcitacao_id = 1
@@ -79,50 +94,86 @@ def lotacao():
 @main.route('/editar_lotacao', methods=['GET', 'POST'])
 @login_required
 def editar_lotacao():
-    titulo = "Editar Lotação - tela 1 de 3"
+    id_da_lotacao = request.args.get('id_da_lotacao')
+    titulo = gera_titulo(id_da_lotacao, 1)
     form = LotacaoForm1()
     disciplinas = Disciplina.query.filter(Disciplina.periodo!='').all()
     periodos = set([disciplina.periodo for disciplina in disciplinas])
     form.periodo.choices = [(periodo, periodo) for periodo in periodos]
     disciplinas_por_periodo = Disciplina.query.filter(Disciplina.periodo==1).all()
     form.disciplina.choices = [(disciplina.nome,disciplina.nome) for disciplina in disciplinas_por_periodo]
-    if form.validate_on_submit():
-        dados = {
-            "periodo" : form.periodo.data,
-            "disciplina" : form.disciplina.data,
-            "turma" : form.turma.data
-        }
-        return redirect(url_for('main.editar_lotacao2', dados=dados))
-    return render_template('editarLotacao.html', titulo=titulo.decode('utf-8'), form=form)
+
+    if request.method == 'POST':
+        disciplina = Disciplina.query.filter(Disciplina.nome==form.disciplina.data).all()
+        item_atual  = ItemLotacao (
+            lotacao_id = id_da_lotacao,
+            diciplina_id = disciplina[0].id,
+            turma = form.turma.data,
+            vagas = form.vagas.data
+        )
+        db.session.add(item_atual)
+        db.session.commit()
+        id_item_atual = item_atual.id
+        return redirect(url_for('main.editar_lotacao2', id_da_lotacao=id_da_lotacao, id_item_atual=id_item_atual))
+    return render_template('editarLotacao.html', titulo=titulo.decode('utf-8'), form=form, lista_itens_lotacao=lista_itens_lotacao(id_da_lotacao))
 
 #Caso de Uso 2
 @main.route('/editar_lotacao2', methods=['GET', 'POST'])
 @login_required
 def editar_lotacao2():
-    titulo = "Editar Lotação - tela 2 de 3"
+    id_da_lotacao = request.args.get('id_da_lotacao')
+    id_item_atual = request.args.get('id_item_atual')
+    titulo = gera_titulo(id_da_lotacao, 2)
     form = LotacaoForm2()
+    coordenacoes = Coordenacao.query.all()
+    form.coordenacao.choices = [(coordenacao.id,coordenacao.nome) for coordenacao in coordenacoes]
+    professores_computacao = Usuario.query.filter(Usuario.coordenacao_id==1,Usuario.tipo=='Professor' ).all()
+    form.professor.choices = [(professor.nome,professor.nome) for professor in professores_computacao]
+    salas = Sala.query.all()
+    campi = list(set([sala.campus for sala in salas]))
+    form.campus.choices = [(campus,campus) for campus in campi]
+    predios = list(set([sala.localizacao for sala in salas]))
+    form.localizacao.choices = [(predio,predio) for predio in predios]
+    form.sala.choices = [(sala.descricao,sala.descricao) for sala in salas]
     if request.method == 'POST':
-        dados = {
-            "coordenacao" : form.coordenacao.data,
-            "professor" : form.professor.data,
-            "sala" : form.sala.data
-        }
-        return redirect(url_for('main.editar_lotacao3', dados=dados))
-    return render_template('editarLotacao2.html', titulo=titulo.decode('utf-8'), form=form)
+        item_atual = ItemLotacao.query.get(id_item_atual)
+        professor = Usuario.query.filter(Usuario.nome==form.professor.data).all()
+        if current_user.coordenacao_id == professor[0].coordenacao_id:
+            item_atual.in_solitacao = 'N'
+            item_atual.status_solcitacao_id = 5
+        else:
+            item_atual.in_solitacao = 'S'
+            item_atual.status_solcitacao_id = 1
+        usuario_item_lotacao = UsuarioItemLotacao()
+        usuario_item_lotacao.professor_id = professor[0].id
+        usuario_item_lotacao.item_lotacao_id = item_atual.id
+        #salas_itens_lotacoes.
+        sala = Sala.query.filter(
+            Sala.campus == form.campus.data,
+            Sala.localizacao == form.localizacao.data,
+            Sala.descricao == form.sala.data
+        ).all()
+        sala_item_lotacao = SalaItemLotacao(
+            sala_id = sala[0].id,
+            item_lotacao_id = item_atual.id
+        )
+        db.session.add_all([item_atual, usuario_item_lotacao, sala_item_lotacao])
+        db.session.commit()
+        return redirect(url_for('main.editar_lotacao3', id_da_lotacao=id_da_lotacao,id_item_atual=id_item_atual))
+    return render_template('editarLotacao.html', titulo=titulo.decode('utf-8'), form=form, lista_itens_lotacao=lista_itens_lotacao(id_da_lotacao))
 
 #Caso de Uso 2
 @main.route('/editar_lotacao3', methods=['GET', 'POST'])
 @login_required
 def editar_lotacao3():
-    titulo = "Editar Lotação - tela 3 de 3"
+    id_da_lotacao = request.args.get('id_da_lotacao')
+    id_item_atual = request.args.get('id_item_atual')
+    print id_da_lotacao
+    titulo = gera_titulo(id_da_lotacao, 3)
     form = LotacaoForm3()
     if request.method == 'POST':
-        dados = {
-            "dia" : form.dia.data,
-            "horario" : form.horario.data,
-        }
-        return redirect('main.editar_lotacao', dados=dados)
-    return render_template('editarLotacao3.html', titulo=titulo.decode('utf-8'), form=form)
+        return redirect(url_for('main.editar_lotacao', id_da_lotacao=id_da_lotacao))
+    return render_template('editarLotacao3.html', titulo=titulo.decode('utf-8'), form=form, lista_itens_lotacao=lista_itens_lotacao(id_da_lotacao), id_item_atual=id_item_atual)
 
 
 

@@ -11,6 +11,86 @@
        {{ wtf.quick_form(form) }}
     </div>
   </div>
+  <br>
+  <div class="row">
+    <div class="col-md-12">
+      <h3>Itens da Lotação</h3>
 
-  
+        {% if lista_itens_lotacao %}
+        <table class="table table-bordered">
+        <thead>
+
+          <tr>
+            <td>Período</td>
+            <td>Disciplina</td>
+            <td>Fluxo</td>
+            <td>Turma</td>
+            <td>Carga Horária</td>
+            <td>Horário</td>
+            <td>Vagas</td>
+            <td>Sala</td>
+            <td>Professor</td>
+            <td>Editar</td>
+            <td>Excluir</td>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item_lotacao in lista_itens_lotacao %}
+            <tr>
+              <td>{{ item_lotacao[0] }}</td>
+              <td>{{ item_lotacao[1] }}</td>
+              <td>{{ item_lotacao[2] }}</td>
+              <td>{{ item_lotacao[3] }}</td>
+              <td>{{ item_lotacao[4] }}</td>
+              {% if item_lotacao[5] %}
+                 <td id="horario_cel">
+                 {% for hr in item_lotacao[5] %}
+                    <span>
+                      {% for i in hr %}
+                         {% if loop.counter == 0 %}
+                           {{ i }} -
+                         {% else %}
+                           {{ i }}
+                         {% endif %}
+                      {% endfor%}
+                    </span>
+                 {% endfor %}
+                 </td>
+              {% else %}
+                <td id="horario_cel">&nbsp</td>
+              {% endif %}
+              <td>{{ item_lotacao[6] }}</td>
+              {% if item_lotacao[7] %}
+                 <td>
+                 {% for descricao in item_lotacao[7] %}
+                   <span>{{ descricao }}&nbsp</span>
+                 {% endfor %}
+                 </td>
+              {% else %}
+                <td>&nbsp</td>
+              {% endif %}
+
+              {% if item_lotacao[8] %}
+                 <td>
+                 {% for nome in item_lotacao[8] %}
+                   <span>{{ nome }}&nbsp</span>
+                 {% endfor %}
+                 </td>
+              {% else %}
+                   <td>&nbsp</td>
+              {% endif %}
+
+              <td><a href="#">Editar</a></td>
+              <td><a href="#">Excluir</a></td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+        {% else %}
+           <p>Não existem itens da lotacao cadastradas</p>
+        {% endif %}
+
+    </div>
+  </div>
+
 {% endblock %}

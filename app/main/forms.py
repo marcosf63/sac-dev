@@ -86,26 +86,28 @@ tipo_ralatorio = [
 
 class SemestreForm(FlaskForm):
     semestre = StringField(u'Informe o semestre', validators=[Required(), Length(1,6)])
-    submit = SubmitField(u'Cadastrar Lotação Vazia')
+    submit = SubmitField(u'Cadastrar nova lotação')
 
 
 class LotacaoForm1(FlaskForm):
-    periodo = SelectField(u'Selecione o Período:', choices=[])
+    periodo = SelectField(u'Selecione o Período:', coerce=int)
     disciplina = SelectField(u'Selecione a Desciplina:', choices=[])
     turma = StringField(u'Informe a Turma', validators=[Required(), Length(1,3)])
     vagas = StringField(u'Informe o numero de vagas', validators=[Required(), Length(1,3)])
     submit = SubmitField(u'Próximo')
 
 class LotacaoForm2(FlaskForm):
-    coordenacao = SelectField(u'Selecione a Coordenacao:',choices=coordenacoes)
-    professor = SelectField(u'Selecione Professor:',choices=professores)
-    sala =  StringField(u'Informe a Sala', validators=[Required(), Length(1,3)])
+    coordenacao = SelectField(u'Selecione a Coordenacao:', choices=[])
+    professor = SelectField(u'Selecione Professor:', choices=[])
+    campus = SelectField(u'Selecione o Campus:', choices=[])
+    localizacao = SelectField(u'Selecione Bloco/Predio/Edificio:', choices=[])
+    sala = SelectField(u'Selecione a Sala:', choices=[])
     submit = SubmitField(u'Próximo')
 
 class LotacaoForm3(FlaskForm):
     dia =  StringField(u'Informe o dia (Segunda Terca etc)', validators=[Required(), Length(1,10)])
     horario = StringField(u'Informe o horario (ABCD EF etc)', validators=[Required(), Length(1,10)])
-    submit = SubmitField(u'Salvar')
+    submit = SubmitField(u'Incluir novo Item')
 
 
 # a = BooleanField("A")

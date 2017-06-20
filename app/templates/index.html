@@ -11,7 +11,7 @@
         {% if lotacoes %}
 
           {% for lotacao in lotacoes %}
-             <li><a href="{{ url_for('main.editar_lotacao', lotacao_id='{{ lotacao.lotacao_id }}') }}"><span>Lotação </span>{{ lotacao.semestre }} - {{ lotacao.situacao }}</a></li>
+             <li><a href="{{ url_for('main.editar_lotacao', id_da_lotacao=lotacao.id) }}"><span>Lotação </span>{{ lotacao.semestre }} - {{ lotacao.situacao }}</a></li>
           {% endfor %}
 
           {% if solicitacoes_pendentes %}

@@ -144,7 +144,7 @@ class Lotacao(db.Model):
 class ItemLotacao(db.Model):
     __tablename__ = 'itens_lotacao'
     id = db.Column(db.Integer, primary_key=True)
-    turma = db.Column(db.String(2), unique=True) # Turma 1, 2, A, B etc.
+    turma = db.Column(db.String(2)) # Turma 1, 2, A, B etc.
     vagas = db.Column(db.Integer)
     in_solitacao = db.Column(db.String(1)) # S = Sim ou N = Nao
     status_solcitacao_id = db.Column(db.Integer, db.ForeignKey('status_solcitacoes.id'))
@@ -153,7 +153,6 @@ class ItemLotacao(db.Model):
     itens_lotacao_usuarios = db.relationship('UsuarioItemLotacao', backref='usuarios_itens_lotacao.professor_id', lazy='dynamic')
     salas_itens_lotacoes = db.relationship('SalaItemLotacao', backref='salas_itens_lotacao1', lazy='dynamic')
     dias = db.relationship('Dia', backref='dias', lazy='dynamic')
-    horarios = db.relationship('Horario', backref='horarios', lazy='dynamic')
 
     def __repr__(self):
         return '<ItemLotacao %r>' % self.turma
@@ -176,6 +175,7 @@ class Dia(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     dia = db.Column(db.String(10), unique=True) # Segunda, ..., Sabado
     item_lotacao_id = db.Column(db.Integer, db.ForeignKey('itens_lotacao.id'))
+    horarios = db.relationship('Horario', backref='horarios', lazy='dynamic')
 
     def __repr__(self):
         return '<Dia %r>' % self.dia
@@ -184,7 +184,7 @@ class Horario(db.Model):
     __tablename__ = 'horarios'
     id = db.Column(db.Integer, primary_key=True)
     horario = db.Column(db.String(1), unique=True) # A, ..., S
-    item_lotacao_id = db.Column(db.Integer, db.ForeignKey('itens_lotacao.id'))
+    dia_id = db.Column(db.Integer, db.ForeignKey('dias.id'))
 
     def __repr__(self):
         return '<Horario %r>' % self.horario

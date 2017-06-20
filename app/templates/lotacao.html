@@ -37,11 +37,11 @@
               <td>{{ lotacao.semestre }}</td>
               <td>{{ lotacao.situacao }}</td>
               {% if lotacao.situacao == 'Em andamento' %}
-                <td><a href="{{ url_for('main.editar_lotacao', lotacao_id='{{ lotacao.lotacao_id }}') }}">Editar</a></td>
+                <td><a href="{{ url_for('main.editar_lotacao', id_da_lotacao=lotacao.id) }}">Editar</a></td>
                 <td><a href="#">Excluir</a></td>
               {% else %}
-                <td><a href="{{ url_for('main.editar_lotacao', lotacao_id='{{ lotacao.lotacao_id }}') }}">Consultar</a></td>
-                <td><a href="{{ url_for('main.editar_lotacao', lotacao_id='{{ lotacao.lotacao_id }}', operacao='copiar') }}">Copiar para uma Nova</a></td>
+                <td><a href="{{ url_for('main.editar_lotacao', id_da_lotacao=lotacao.id) }}">Consultar</a></td>
+                <td><a href="#"></a></td>
               {% endif %}
             </tr>
           {% endfor %}
