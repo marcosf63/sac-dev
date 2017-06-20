@@ -1,21 +1,10 @@
 $(document).ready(function(){
- //  $('[data-submenu]').submenupicker();
-  //
- //  $('#1').hover(function(){
- //     $(this).toggleClass('open');
- //  });
- //  $('#2').hover(function(){
- //     $(this).toggleClass('open');
- //  });
- //  $('#3').hover(function(){
- //     $(this).toggleClass('open');
- //  });
-
+ //http://localhost:5000/api/get_professores
  // Busca as disciplinas para atualizar o template editar_lotacao
  var periodo = $('#periodo');
  periodo.change(function(){
    valor_periodo = $(this).val();
-   $.get( "http://localhost:5000/api/get_disciplinas", {valor_periodo : valor_periodo}, function(disciplinas) {
+   $.get( "http://sac-dev.marcosf.com.br/api/get_disciplinas", {valor_periodo : valor_periodo}, function(disciplinas) {
       console.log(disciplinas);
       var $disciplina = $('#disciplina')
       $disciplina.empty()
@@ -30,7 +19,7 @@ $(document).ready(function(){
  var coordenacao = $('#coordenacao');
  coordenacao.change(function(){
    id_coordenacao = $(this).val();
-   $.get( "http://localhost:5000/api/get_professores", {id_coordenacao : id_coordenacao}, function(professores) {
+   $.get( "http://sac-dev.marcosf.com.br/api/get_professores", {id_coordenacao : id_coordenacao}, function(professores) {
       console.log(professores);
       var $professor = $('#professor')
       $professor.empty()
@@ -49,7 +38,7 @@ $(document).ready(function(){
  var horario_cel = $('#horario_cel')
 
  adicionar_btn.click(function(){
-   $.get( "http://localhost:5000/api/set_horario",
+   $.get( "http://sac-dev.marcosf.com.br/api/set_horario",
            {
               dia : dia.val(),
               horario : horario.val(),
