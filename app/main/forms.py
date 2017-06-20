@@ -85,7 +85,7 @@ tipo_ralatorio = [
 ]
 
 class SemestreForm(FlaskForm):
-    semestre = StringField(u'Informe o semestre', validators=[Required(), Length(1,6)])
+    semestre = StringField(u'Informe o semestre (ex. 2017.2)', validators=[Required(), Length(1,6)])
     submit = SubmitField(u'Cadastrar nova lotação')
 
 
